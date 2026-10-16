@@ -1,12 +1,15 @@
+{%extends 'base.html'%}
+{%load static%}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <title>Fênix | SGJogos</title>
+    <title>{%block title%}{{equipe.nome}}{%endblock title%}</title>
 </head>
 <body>
+    {%block conteudo%}
     <header class="cabecalho">
         <div class="conteudo">
             <a class="marca" href="index.html">
@@ -27,25 +30,30 @@
 
         <header class="topo">
             <span class="sobretitulo">Equipe</span>
-            <h1>Fênix</h1>
-            <p class="descricao">Informática · 3º ano · 4 atletas</p>
+            <h1>{{equipe.nome}}</h1>
+            <p class="descricao">{{equipe.curso}}</p>
         </header>
 
         <h2>Técnico</h2>
+        {%if equipe.tecnico != None%}
         <dl class="numeros ficha">
             <div>
                 <dt>Nome</dt>
-                <dd>Marcos Pereira</dd>
+                <dd>{{equipe.tecnico}}</dd>
             </div>
             <div>
                 <dt>E-mail</dt>
-                <dd>marcos.pereira@escolar.ifrn.edu.br</dd>
+                <dd>{{equipe.tecnico.email}}</dd>
             </div>
             <div>
                 <dt>Telefone</dt>
-                <dd>(84) 99999-1234</dd>
+                <dd>equipe.tecnico.telefone</dd>
             </div>
         </dl>
+        {%endif%}
+        {%if equipe.tecnico == None%}
+        <p class="aviso">Esta equipe ainda não tem técnico cadastrado.</p>
+        {%endif%}
 
         <!-- Quando a equipe não tiver técnico, use no lugar da ficha acima: -->
         <!-- <p class="aviso">Esta equipe ainda não tem técnico cadastrado.</p> -->
@@ -53,6 +61,7 @@
         <h2>Atletas</h2>
         <div class="tabela">
             <table>
+                
                 <thead>
                     <tr>
                         <th>Nome</th>
@@ -61,40 +70,24 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {%for atleta in equipe.atletas.all%}
                     <tr>
-                        <td>Ana Clara Fernandes</td>
-                        <td>20241094010001</td>
+                        <td>{{atleta.nome}}</td>
+                        <td>{{atleta.matricula}}</td>
                         <td>
+                    
                             <ul class="modalidades">
-                                <li><a href="modalidade.html">Voleibol</a></li>
-                                <li><a class="individual" href="modalidade.html">Xadrez</a></li>
+                                {%for modalidade in atleta.modalidades.all%}
+                                <li><a href="{%url 'jogos:modalidade' modalidade.id%}">{{modalidade.nome}}</a></li>
+                                {%endfor%}
                             </ul>
+                            {%empty%}
+                            <tr><td class="vazio" colspan="3">Nenhum atleta inscrito.</td></tr>
+
+                        {%endfor%}
                         </td>
                     </tr>
-                    <tr>
-                        <td>Bruno Henrique Costa</td>
-                        <td>20241094010002</td>
-                        <td>
-                            <ul class="modalidades">
-                                <li><a href="modalidade.html">Futsal</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Davi Lucas Oliveira</td>
-                        <td>20241094010003</td>
-                        <td>
-                            <ul class="modalidades">
-                                <li><a class="individual" href="modalidade.html">Atletismo 100 m</a></li>
-                                <li><a href="modalidade.html">Futsal</a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Maria Eduarda Silva</td>
-                        <td>20241094010004</td>
-                        <td><span class="aviso">Nenhuma modalidade</span></td>
-                    </tr>
+                    
                     <!-- Quando a equipe não tiver atletas, a tabela deve ter apenas esta linha: -->
                     <!-- <tr><td class="vazio" colspan="3">Nenhum atleta inscrito.</td></tr> -->
                 </tbody>
@@ -108,5 +101,6 @@
             <p>IFRN Campus Pau dos Ferros · 2026</p>
         </div>
     </footer>
+    {%endblock%}
 </body>
 </html>

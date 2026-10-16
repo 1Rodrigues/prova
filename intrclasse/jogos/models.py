@@ -19,8 +19,6 @@ class Equipe(models.Model):
     cor = models.CharField(max_length=10)
     criada_em = models.DateTimeField( auto_now_add=True)
    
-    
-
     def __str__(self):
             return self.nome
     class Meta:
